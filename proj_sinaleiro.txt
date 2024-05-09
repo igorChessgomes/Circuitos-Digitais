@@ -1,0 +1,107 @@
+
+--Autores: Igor, Larissa, Eric
+--Projeto_08_sinaleira
+--Professor: Querido Dalton
+LIBRARY IEEE;
+USE  IEEE.STD_LOGIC_1164.all;
+USE  IEEE.STD_LOGIC_ARITH.all;
+USE  IEEE.STD_LOGIC_UNSIGNED.all;
+
+
+ENTITY proj_08_sinaleira IS 			--Definir pinos de entrada e saida
+	PORT(clk_50Mhz,SW0 				: IN	STD_LOGIC; 				--Pino de entrada,chave
+		  LEDR					: OUT STD_LOGIC_VECTOR(5 DOWNTO 0);		--leds de saída	
+		  HEX0					: OUT STD_LOGIC_VECTOR(6 DOWNTO 0));		--ESCREVE NO DISPLAY HEX0
+END proj_08_sinaleira;
+
+ARCHITECTURE a OF proj_08_sinaleira IS 									--Definir variaveis  (a=behavior)
+	SIGNAL CLK_COUNT_1HZ					: STD_LOGIC_VECTOR(27 DOWNTO 0); 	--28bits (tipo da variavel: VETOR)
+	SIGNAL CLK_1HZ   						: STD_LOGIC; 			--1bit 
+	SIGNAL Display 						: STD_LOGIC_VECTOR (3 DOWNTO 0); 	-- flip-flop
+	
+BEGIN
+
+	PROCESS
+	BEGIN
+	 WAIT UNTIL CLK_50MHZ'EVENT AND CLK_50MHZ = '1'; 						--espera transição para 1
+			IF CLK_COUNT_1HZ < X"1312D00" THEN 						--X = numeração hexa
+			--IF CLK_COUNT_1HZ < X"0000001" THEN 						-- valor hexadecimal A para teste
+				 CLK_COUNT_1HZ <= CLK_COUNT_1HZ+1;				   	-- enquanto menor do que 25000000
+		ELSE											-- incrementa variável
+		    	 CLK_COUNT_1HZ <= X"0000000"							-- se for maior zera variável Clk_Count_1Hz
+				 CLK_1HZ <= NOT CLK_1HZ							-- e inverte o bit CLK_1HZ
+			END IF;
+	END PROCESS;
+	
+	
+	PROCESS																							-- Logica para CONTAR 
+	BEGIN
+	WAIT UNTIL CLK_1HZ'EVENT AND CLK_1HZ = '1';							-- espera transição do CLK_1Hz
+			if SW0 = '1' then
+				IF Display <= X"A" THEN 	
+					Display <= Display + 1;  					-- Aumenta 1 no contador ou variável - UP
+					ELSE
+						Display <= X"0";	               		   -- reset na variável	= Comentado não tem essa função	
+				END IF;
+				else
+					IF (Display <= X"E") THEN 	
+						Display <= Display + 1;  			 	-- Aumenta 1 no contador ou variável - UP
+						ELSE
+							Display <= X"C";				  -- reset na variável	= Comentado não tem essa função	
+					END IF;
+				end if;	
+
+			
+			CASE Display IS									-- Decodificador p/ mostrar no display e led sinaleira
+				WHEN X"0" => 
+					HEX0 <= "1000000";
+					LEDR <= "100001";
+				WHEN X"1" =>
+					HEX0 <= "1111001";
+					LEDR <= "100001";
+				WHEN X"2" =>
+					HEX0 <= "0100100";
+					LEDR <= "100001";
+				WHEN X"3" =>
+					HEX0 <= "0110000";
+					LEDR <= "100001";
+				WHEN X"4" =>
+					HEX0 <= "0011001";
+					LEDR <= "100001";
+				WHEN X"5" =>
+					HEX0 <= "0010010";
+					LEDR <= "100010";
+				WHEN X"6" =>
+					HEX0 <= "0000010";
+					LEDR <= "100100";
+				WHEN X"7" =>
+					HEX0 <= "1111000";
+					LEDR <= "001100";
+				WHEN X"8" =>
+					HEX0 <= "0000000";
+					LEDR <= "001100";
+				WHEN X"9" =>
+					HEX0 <= "0010000";
+					LEDR <= "001100";
+				WHEN X"A" =>
+					HEX0 <= "0001000";
+					LEDR <= "010100";
+				WHEN X"B" =>
+					HEX0 <= "0000011";
+					LEDR <= "100100";
+				WHEN X"C" =>
+					HEX0 <= "1000110";
+					LEDR <= "010010";
+				WHEN X"D" =>
+					HEX0 <= "0100001";
+					LEDR <= "000000";
+				WHEN X"E" =>
+					HEX0 <= "0000110";
+					LEDR <= "010010";						
+				WHEN OTHERS =>
+					HEX0 <= "0001110";
+					LEDR <= "000000";
+			END CASE;
+	END PROCESS;			
+END a;
+

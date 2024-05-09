@@ -1,0 +1,74 @@
+
+LIBRARY IEEE;
+USE  IEEE.STD_LOGIC_1164.all;
+USE  IEEE.STD_LOGIC_ARITH.all;
+USE  IEEE.STD_LOGIC_UNSIGNED.all;
+
+Entity VHDL_basico is
+	PORT(
+		  --  PINOS DE ENTRADA -------------------------------------------------
+		  CLOCK_50	 						: IN STD_LOGIC; 									
+		  KEY									: IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+		  SW									: IN STD_LOGIC_VECTOR(3 DOWNTO 0);
+		  --  PINOS DE SAÍDA   -------------------------------------------------
+		  LEDR								: OUT STD_LOGIC_VECTOR(17 DOWNTO 0);				
+		  LEDG								: OUT STD_LOGIC_VECTOR(8 DOWNTO 0);
+		  
+		  HEX0								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		  HEX1								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		  HEX2								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		  HEX3								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		  HEX4								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		  HEX5								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		  HEX6								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
+		  HEX7								: OUT STD_LOGIC_VECTOR(6 DOWNTO 0));		
+End Entity;
+
+
+ARCHITECTURE ou_estrutura OF VHDL_basico IS 	
+
+BEGIN
+
+	PROCESS (KEY)
+	BEGIN
+	
+	
+			CASE SW IS																		
+				WHEN X"0" => 
+					Hex0 <= B"1000000";
+				WHEN X"1" => 
+					Hex0 <= B"1111001";
+				WHEN X"2" => 
+					Hex0 <= B"0100100";
+				WHEN X"3" => 
+					Hex0 <= B"0110000";	
+				WHEN X"4" => 
+					Hex0 <= B"0011001";
+				WHEN X"5" => 
+					Hex0 <= B"0010010";
+				WHEN X"6" => 
+					Hex0 <= B"0000010";
+				WHEN X"7" => 
+					Hex0 <= B"1111000";
+				WHEN X"8" => 
+					Hex0 <= B"0000000";	
+				WHEN X"9" => 
+					Hex0 <= B"0010000";
+				WHEN X"A" => 
+					Hex0 <= B"0100000";
+				WHEN X"B" => 
+					Hex0 <= B"0000011";
+				WHEN X"C" => 
+					Hex0 <= B"1000110";
+				WHEN X"D" => 
+					Hex0 <= B"0100001";	
+				WHEN X"E" => 
+					Hex0 <= B"0000110";	
+				WHEN OTHERS => 
+					Hex0 <= B"0001110";	
+				END CASE;
+	END PROCESS;
+	
+END ou_estrutura;
+
+
